@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const requiredEnvVars = ["MONGO_URI", "JWT_SECRET", "JWT_EXPIRES_IN"];
+const requiredEnvVars = ["MONGO_URI", "JWT_SECRET", "JWT_EXPIRES_IN", "MONGO_URI_PROD"];
 
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
@@ -16,4 +16,5 @@ export default {
   mongoUri: process.env.MONGO_URI as string,
   jwtSecret: process.env.JWT_SECRET as string,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN as string,
+  mongoProd: process.env.MONGO_URI_PROD as string
 };
