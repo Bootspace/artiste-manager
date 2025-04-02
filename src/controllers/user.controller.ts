@@ -1,15 +1,19 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../utils/asyncHandler';
 import User from '../models/User';
-import * as jwt from 'jsonwebtoken';
+import jwt, {Secret, SignOptions} from 'jsonwebtoken';
 import config from '../config/config';
 
 // Generate JWT
-const generateToken = (id: string): string => {
-  return jwt.sign({ id: id.toString() } , config.jwtSecret, {
-    expiresIn: config.jwtExpiresIn,
-  });
+const generateToken = (_id: string): string => {
+  const secret: Secret = config.jwtSecret;
+  const options: SignOptions = {
+    expiresIn: config.jwtExpiresIn as any,
+  };
+
+  return jwt.sign({ id: _id }, secret, options);
 };
+
 
 // @desc    Register user
 // @route   POST /api/users
@@ -31,6 +35,8 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
     password,
   });
 
+   const userId = user.id.toString();
+
   if (user) {
     res.status(201).json({
       success: true,
@@ -39,7 +45,7 @@ export const registerUser = asyncHandler(async (req: Request, res: Response) => 
         name: user.name,
         email: user.email,
         role: user.role,
-        token: generateToken(user._id),
+        token: generateToken(userId),
       },
     });
   } else {
@@ -67,6 +73,9 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     return res.status(401).json({ success: false, error: 'Invalid credentials' });
   }
 
+  const userId = user.id.toString();
+
+
   res.status(200).json({
     success: true,
     data: {
@@ -74,7 +83,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      token: generateToken(user._id),
+      token: generateToken(userId),
     },
   });
 });

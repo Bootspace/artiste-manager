@@ -216,7 +216,7 @@ export const getEvents = asyncHandler(async (req: Request, res: Response) => {
     query = query.populate('artists', 'name genre profileImage');
     
     // Execute query with defensive approach
-    let events;
+    let events: any[];
     try {
       events = await Promise.resolve(query.lean().exec());
     } catch (findError) {
