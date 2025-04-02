@@ -9,7 +9,7 @@ const config_1 = __importDefault(require("./config"));
 const logger_1 = __importDefault(require("../utils/logger"));
 const connectDB = async () => {
     try {
-        const conn = await mongoose_1.default.connect(config_1.default.mongoUri);
+        const conn = await mongoose_1.default.connect(config_1.default.mongoProd);
         logger_1.default.info(`MongoDB Connected: ${conn.connection.host}`);
     }
     catch (error) {
